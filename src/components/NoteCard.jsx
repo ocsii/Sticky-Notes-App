@@ -1,7 +1,7 @@
 /* useRef is to reference single components without rerendering */
 import { useRef, useEffect, useState } from "react";
 import Trash from "../icons/Trash";
-import { setNewOffset } from "../utils";
+import { setNewOffset, autoGrow, setZIndex } from "../utils";
 
 const NoteCard = ({ note }) => {
   const body = JSON.parse(note.body);
@@ -24,15 +24,6 @@ const NoteCard = ({ note }) => {
     autoGrow(textAreaRef);
   }, []);
 
-  // textAreaRef.current accesses the actual <textarea> DOM node.
-  // 1 It resets the height to "auto" to ensure that shrinking the content reduces the height.
-  // 2 It sets the height to the scrollHeight, which represents the total height required to display all the content.
-  const autoGrow = (textarea) => {
-    const { current } = textAreaRef;
-    current.style.height = "auto";
-    current.style.height = current.scrollHeight + "px";
-  };
-
   // When you click on a note
   const mouseDown = (e) => {
     mouseStartPos.x = e.clientX;
@@ -40,6 +31,8 @@ const NoteCard = ({ note }) => {
 
     document.addEventListener("mousemove", mouseMove);
     document.addEventListener("mouseup", mouseUp);
+
+    setZIndex(cardRef.current);
   };
 
   // When you let go
@@ -92,6 +85,9 @@ const NoteCard = ({ note }) => {
           onInput={() => {
             // Triggered when use changes content in textarea
             autoGrow(textAreaRef);
+          }}
+          onFocus={() => {
+            setZIndex(cardRef.current);
           }}
         ></textarea>
       </div>
