@@ -1,10 +1,10 @@
 /* useRef is to reference single components without rerendering */
 import { useRef, useEffect, useState } from "react";
 import Trash from "../icons/Trash";
-import { setNewOffset, autoGrow, setZIndex } from "../utils";
+import { setNewOffset, autoGrow, setZIndex, bodyParser } from "../utils";
 
 const NoteCard = ({ note }) => {
-  const body = JSON.parse(note.body);
+  const body = bodyParser(note.body);
   const [position, setPosition] = useState(JSON.parse(note.position));
   const colors = JSON.parse(note.colors);
 
